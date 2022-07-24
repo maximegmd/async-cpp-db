@@ -16,7 +16,7 @@ target("async-db-cpp")
     add_headerfiles("src/**.hpp")
     add_packages("hopscotch-map", "mariadb-connector-c")
 
-target("Tests")
+target("async-db-cpp-tests")
     set_kind("binary")
     add_files("tests/**.cpp")
     add_deps("async-db-cpp")
