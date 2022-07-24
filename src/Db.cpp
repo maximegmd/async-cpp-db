@@ -3,6 +3,7 @@
 #include <mariadb/mysql.h>
 #include <thread>
 #include <iostream>
+#include <utility>
 
 Async::Db::Db() noexcept
 	: m_db(std::make_unique<MYSQL>())
