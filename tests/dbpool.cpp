@@ -20,7 +20,6 @@ TEST_CASE("Pool Select", "dbpool.select")
 {
 	Async::DbPool db("127.0.0.1", 3306, "root", "test", "test");
 
-
 	WHEN("Connected")
 	{
 		// Condition is correct, optional is only set to an error if it fails

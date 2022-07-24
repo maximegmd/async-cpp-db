@@ -1,6 +1,5 @@
 #include "DbPool.hpp"
 #include <thread>
-#include <algorithm>
 
 std::future<std::optional<Async::Result>> Async::DbPool::Fetch(const std::string& aQuery) noexcept
 {
@@ -25,12 +24,14 @@ std::future<std::optional<Async::Result>> Async::DbPool::Fetch(const std::string
 
 		auto result = db->Fetch(aQuery);
 
+		// Only add it to the pool if the query was successful, this will cause malformed requests to lose connections but this is an edge case
+		if(result)
 		{
 			std::scoped_lock _{ m_lock };
 			m_dbs.push(db);
 		}
 
-		return std::move(result);
+		return result;
 	});
 }
 
@@ -57,12 +58,14 @@ std::future<std::optional<std::string>> Async::DbPool::Execute(const std::string
 
 		auto result = db->Execute(aQuery);
 
+		// Only add it to the pool if the query was successful, this will cause malformed requests to lose connections but this is an edge case
+		if (!result)
 		{
 			std::scoped_lock _{ m_lock };
 			m_dbs.push(db);
 		}
 
-		return std::move(result);
+		return result;
 	});
 }
 
