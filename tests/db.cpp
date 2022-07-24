@@ -5,7 +5,7 @@ TEST_CASE("Connect", "db.connect")
 {
 	Async::Db db;
 	// Condition is correct, optional is only set to an error if it fails
-	REQUIRE(!db.Connect("127.0.0.1", 3306, "root", "test", "test").get());
+	REQUIRE(!db.Connect("127.0.0.1", 3306, "root", "test", "test"));
 	
 }
 
@@ -15,18 +15,18 @@ TEST_CASE("Insert", "db.insert")
 
 	WHEN("not connected")
 	{
-		REQUIRE(db.Execute("INSERT INTO test_list VALUES(1, 'test');").get());
+		REQUIRE(db.Execute("INSERT INTO test_list VALUES(1, 'test');"));
 	}
 
 	WHEN("Connected")
 	{
 		// Condition is correct, optional is only set to an error if it fails
-		REQUIRE(!db.Connect("127.0.0.1", 3306, "root", "test", "test").get());
-		REQUIRE(!db.Execute("INSERT INTO test_list VALUES(1, 'test');").get());
+		REQUIRE(!db.Connect("127.0.0.1", 3306, "root", "test", "test"));
+		REQUIRE(!db.Execute("INSERT INTO test_list VALUES(1, 'test');"));
 
 		THEN("Malformed")
 		{
-			REQUIRE(db.Execute("INSERT INTO test_list VALUES(1, 'test', 45);").get());
+			REQUIRE(db.Execute("INSERT INTO test_list VALUES(1, 'test', 45);"));
 		}
 	}
 }
@@ -37,14 +37,14 @@ TEST_CASE("Select", "db.select")
 
 	WHEN("not connected")
 	{
-		REQUIRE(!db.Fetch("SELECT * FROM test_list;").get());
+		REQUIRE(!db.Fetch("SELECT * FROM test_list;"));
 	}
 
 	WHEN("Connected")
 	{
 		// Condition is correct, optional is only set to an error if it fails
-		REQUIRE(!db.Connect("127.0.0.1", 3306, "root", "test", "test").get());
-		auto res = db.Fetch("SELECT * FROM test_list;").get();
+		REQUIRE(!db.Connect("127.0.0.1", 3306, "root", "test", "test"));
+		auto res = db.Fetch("SELECT * FROM test_list;");
 		REQUIRE(res);
 		if (res) 
 		{
@@ -57,7 +57,7 @@ TEST_CASE("Select", "db.select")
 
 		THEN("Malformed")
 		{
-			REQUIRE(!db.Fetch("SELECT * FROM test_list 45;").get());
+			REQUIRE(!db.Fetch("SELECT * FROM test_list 45;"));
 		}
 	}
 }
