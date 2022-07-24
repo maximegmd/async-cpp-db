@@ -1,7 +1,7 @@
 #include "Field.hpp"
 
 template<>
-std::optional<uint64_t> Async::Field::As<uint64_t>() const noexcept
+std::optional<uint64_t> Async::Field::As<uint64_t>() const
 {
 	try
 	{
@@ -14,7 +14,7 @@ std::optional<uint64_t> Async::Field::As<uint64_t>() const noexcept
 }
 
 template<>
-std::optional<int64_t> Async::Field::As<int64_t>() const noexcept
+std::optional<int64_t> Async::Field::As<int64_t>() const
 {
 	try
 	{
@@ -27,7 +27,7 @@ std::optional<int64_t> Async::Field::As<int64_t>() const noexcept
 }
 
 template<>
-std::optional<uint32_t> Async::Field::As<uint32_t>() const noexcept
+std::optional<uint32_t> Async::Field::As<uint32_t>() const
 {
 	try
 	{
@@ -40,7 +40,7 @@ std::optional<uint32_t> Async::Field::As<uint32_t>() const noexcept
 }
 
 template<>
-std::optional<int32_t> Async::Field::As<int32_t>() const noexcept
+std::optional<int32_t> Async::Field::As<int32_t>() const
 {
 	try
 	{
@@ -53,7 +53,7 @@ std::optional<int32_t> Async::Field::As<int32_t>() const noexcept
 }
 
 template<>
-std::optional<double> Async::Field::As<double>() const noexcept
+std::optional<double> Async::Field::As<double>() const
 {
 	try
 	{
@@ -66,7 +66,7 @@ std::optional<double> Async::Field::As<double>() const noexcept
 }
 
 template<>
-std::optional<float> Async::Field::As<float>() const noexcept
+std::optional<float> Async::Field::As<float>() const
 {
 	try
 	{
@@ -79,13 +79,13 @@ std::optional<float> Async::Field::As<float>() const noexcept
 }
 
 template<>
-std::optional<std::string> Async::Field::As<std::string>() const noexcept
+std::optional<std::string> Async::Field::As<std::string>() const
 {
 	return m_data;
 }
 
 template<>
-std::optional<bool> Async::Field::As<bool>() const noexcept
+std::optional<bool> Async::Field::As<bool>() const
 {
 	try
 	{
