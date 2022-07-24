@@ -34,9 +34,9 @@ TEST_CASE("Field", "db.field")
 
 	WHEN("Using a bool")
 	{
-		Field f("TruE");
+		Field f("true");
 
-		REQUIRE(f.As<std::string>() == "TruE");
+		REQUIRE(f.As<std::string>() == "true");
 		REQUIRE(f.As<uint64_t>() == std::nullopt);
 		REQUIRE(f.As<double>() == std::nullopt);
 		REQUIRE(f.As<bool>() == true);

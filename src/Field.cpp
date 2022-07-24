@@ -89,7 +89,13 @@ std::optional<bool> Async::Field::As<bool>() const noexcept
 {
 	try
 	{
-		return m_data == "1" || strcmpi(m_data.c_str(), "true") == 0;
+		if (m_data == "true" || m_data == "TRUE" || m_data == "1")
+			return true;
+
+		if (m_data == "false" || m_data == "FALSE" || m_data == "0")
+			return false;
+
+		return std::nullopt;
 	}
 	catch (...)
 	{
