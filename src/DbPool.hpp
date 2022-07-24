@@ -16,11 +16,13 @@ namespace Async
 		DbPool(const DbPool&) noexcept = delete;
 		DbPool& operator=(const DbPool&) noexcept = delete;
 
-		std::future<std::optional<Result>> Fetch(const std::string& aQuery) noexcept;
-		std::future<std::optional<std::string>> Execute(const std::string& aQuery) noexcept;
+		[[nodiscard]] std::future<std::optional<Result>> Fetch(const std::string& aQuery) noexcept;
+		[[nodiscard]] std::future<std::optional<std::string>> Execute(const std::string& aQuery) noexcept;
+		void ExecuteAndForget(const std::string& aQuery) noexcept;
 
 	private:
 
+		std::optional<std::string> DoExecute(const std::string& aQuery) noexcept;
 		std::shared_ptr<Db> Connect() noexcept;
 
 		std::mutex m_lock;

@@ -37,36 +37,16 @@ std::future<std::optional<Async::Result>> Async::DbPool::Fetch(const std::string
 
 std::future<std::optional<std::string>> Async::DbPool::Execute(const std::string& aQuery) noexcept
 {
-	return std::async(std::launch::async, [=]() -> std::optional<std::string> {
-
-		std::shared_ptr<Db> db;
-		{
-			std::scoped_lock _{ m_lock };
-
-			if (!m_dbs.empty())
-			{
-				db = m_dbs.top();
-				m_dbs.pop();
-			}
-		}
-
-		if (!db)
-			db = Connect();
-
-		if (!db)
-			return std::nullopt;
-
-		auto result = db->Execute(aQuery);
-
-		// Only add it to the pool if the query was successful, this will cause malformed requests to lose connections but this is an edge case
-		if (!result)
-		{
-			std::scoped_lock _{ m_lock };
-			m_dbs.push(db);
-		}
-
-		return result;
+	return std::async(std::launch::async, [this, aQuery]() {
+		return DoExecute(aQuery);
 	});
+}
+
+void Async::DbPool::ExecuteAndForget(const std::string& aQuery) noexcept
+{
+	std::thread([this, aQuery](){ 
+		DoExecute(aQuery);
+	}).detach();
 }
 
 Async::DbPool::DbPool(std::string acHost, uint16_t aPort, std::string acUsername, std::string acPassword, std::string acDatabase, uint32_t aCount)
@@ -82,6 +62,37 @@ Async::DbPool::DbPool(std::string acHost, uint16_t aPort, std::string acUsername
 		if(db)
 			m_dbs.push(db);
 	}
+}
+
+std::optional<std::string> Async::DbPool::DoExecute(const std::string& aQuery) noexcept
+{
+	std::shared_ptr<Db> db;
+	{
+		std::scoped_lock _{ m_lock };
+
+		if (!m_dbs.empty())
+		{
+			db = m_dbs.top();
+			m_dbs.pop();
+		}
+	}
+
+	if (!db)
+		db = Connect();
+
+	if (!db)
+		return std::nullopt;
+
+	auto result = db->Execute(aQuery);
+
+	// Only add it to the pool if the query was successful, this will cause malformed requests to lose connections but this is an edge case
+	if (!result)
+	{
+		std::scoped_lock _{ m_lock };
+		m_dbs.push(db);
+	}
+
+	return result;
 }
 
 std::shared_ptr<Async::Db> Async::DbPool::Connect() noexcept
